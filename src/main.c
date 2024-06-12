@@ -14,6 +14,7 @@
 #include <zephyr/device.h>
 #include <zephyr/drivers/pwm.h>
 
+// Declare PWM module
 static const struct pwm_dt_spec pwm_led0 = PWM_DT_SPEC_GET(DT_ALIAS(pwm_led0));
 
 #define MIN_PERIOD PWM_SEC(1U) / 128U
