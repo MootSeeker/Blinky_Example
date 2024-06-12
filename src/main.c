@@ -27,12 +27,12 @@ int main(void)
 	uint8_t dir = 0U;
 	int ret;
 
-	printk("PWM-based blinky\n");
-	printk("Test GitHub Repo :)\n"); 
+	printk("PWM-based blinky\n"); 
 
-	if (!pwm_is_ready_dt(&pwm_led0)) {
-		printk("Error: PWM device %s is not ready\n",
-		       pwm_led0.dev->name);
+	// Init PWM module
+	if (!pwm_is_ready_dt(&pwm_led0)) 
+	{
+		printk("Error: PWM device %s is not ready\n", pwm_led0.dev->name);
 		return 0;
 	}
 
@@ -45,9 +45,12 @@ int main(void)
 	 */
 	printk("Calibrating for channel %d...\n", pwm_led0.channel);
 	max_period = MAX_PERIOD;
-	while (pwm_set_dt(&pwm_led0, max_period, max_period / 2U)) {
+
+	while (pwm_set_dt(&pwm_led0, max_period, max_period / 2U)) 
+	{
 		max_period /= 2U;
-		if (max_period < (4U * MIN_PERIOD)) {
+		if (max_period < (4U * MIN_PERIOD)) 
+		{
 			printk("Error: PWM device "
 			       "does not support a period at least %lu\n",
 			       4U * MIN_PERIOD);
@@ -55,22 +58,28 @@ int main(void)
 		}
 	}
 
-	printk("Done calibrating; maximum/minimum periods %u/%lu nsec\n",
-	       max_period, MIN_PERIOD);
-
+	printk("Done calibrating; maximum/minimum periods %u/%lu nsec\n", max_period, MIN_PERIOD);
 	period = max_period;
-	while (1) {
-		ret = pwm_set_dt(&pwm_led0, period, period / 2U);
-		if (ret) {
+
+	// Main Loop 
+	while (1) 
+	{
+		ret = pwm_set_dt(&pwm_led0, period, period / 2U);	// Set PWM value
+		if (ret) 
+		{
 			printk("Error %d: failed to set pulse width\n", ret);
 			return 0;
 		}
 
+		// Calculate new pwm period
 		period = dir ? (period * 2U) : (period / 2U);
-		if (period > max_period) {
+		if (period > max_period) 
+		{
 			period = max_period / 2U;
 			dir = 0U;
-		} else if (period < MIN_PERIOD) {
+		} 
+		else if (period < MIN_PERIOD) 
+		{
 			period = MIN_PERIOD * 2U;
 			dir = 1U;
 		}
