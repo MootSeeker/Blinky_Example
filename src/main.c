@@ -28,6 +28,7 @@ int main(void)
 	int ret;
 
 	printk("PWM-based blinky\n");
+	printk("Test GitHub Repo :)\n"); 
 
 	if (!pwm_is_ready_dt(&pwm_led0)) {
 		printk("Error: PWM device %s is not ready\n",
